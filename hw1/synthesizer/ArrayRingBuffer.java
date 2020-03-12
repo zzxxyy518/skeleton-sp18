@@ -98,14 +98,6 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
         }
     }
 
-    @Override
-    public String toString(){
-        String res="";
-        for(int i=first;i<first+capacity;i++){
-            res+=rb[i%capacity]+" ";
-        }
-        return res;
-    }
 
     // TODO: When you get to part 5, implement the needed code to support iteration.
 }

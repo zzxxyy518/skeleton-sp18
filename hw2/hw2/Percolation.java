@@ -4,7 +4,9 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     private boolean[][] mapStatus;
-
+    private WeightedQuickUnionUF mapSets;
+    private int openSize;
+    private int N;
 
     public Percolation(int N){
         if(N <= 0) {
@@ -16,14 +18,32 @@ public class Percolation {
                 mapStatus[i][j] = false;
             }
         }
+        openSize = 0;
+        this.N = N;
     }
 
     public boolean isOpen(int row, int col){
-        if(row >= mapStatus.length || row < 0 || col >= mapStatus.length || col < 0){
+        if(row >= N || row < 0 || col >= N || col < 0){
             throw new IndexOutOfBoundsException("Illegal coordinate for sites");
         }
         return mapStatus[row][col];
     }
 
+    public boolean isFull(int row, int col){
+        int setId = row * N + col;
+        return mapSets.find(setId) < N;
+    }
 
+    public int numberOfOpenSites(){
+        return openSize;
+    }
+
+    public boolean percolates(){
+        for(int i = 0; i < N; i ++){
+            if(isFull(N - 1, i)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

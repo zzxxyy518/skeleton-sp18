@@ -30,7 +30,7 @@ public class PercolationStats {
     }
 
     public double mean() {
-        return StdStats.mean(fractions);
+        return StdStats.mean(fractions) / (N * N);
     }
 
     public double stddev() {

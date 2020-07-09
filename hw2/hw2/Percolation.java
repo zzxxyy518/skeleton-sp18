@@ -3,10 +3,10 @@ package hw2;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Percolation {
     private boolean[][] grid;
+    private WeightedQuickUnionUF statusWithBottom;
     private WeightedQuickUnionUF status;
     private int size;
     private int N;
@@ -23,7 +23,8 @@ public class Percolation {
                 grid[i][j] = false;
             }
         }
-        status = new WeightedQuickUnionUF(N * N + 2);
+        statusWithBottom = new WeightedQuickUnionUF(N * N + 2);
+        status = new WeightedQuickUnionUF(N * N +1);
         top = 0;
         bottom = N * N + 1;
         size = 0;
@@ -59,13 +60,15 @@ public class Percolation {
         }
         if (row == 0) {
             status.union(xyTo1D(row, col), top);
+            statusWithBottom.union(xyTo1D(row, col), top);
         }
         if (row == N - 1) {
-            status.union(xyTo1D(row, col), bottom);
+            statusWithBottom.union(xyTo1D(row, col), bottom);
         }
         for (Integer[] neighbor : gerNeighbors(row, col)) {
             if (isOpen(neighbor[0], neighbor[1])) {
                 status.union(xyTo1D(row, col), xyTo1D(neighbor[0], neighbor[1]));
+                statusWithBottom.union(xyTo1D(row, col), xyTo1D(neighbor[0], neighbor[1]));
             }
         }
     }
@@ -89,7 +92,7 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        return status.connected(top, bottom);
+        return statusWithBottom.connected(top, bottom);
     }
 
     public static void main(String[] args) {

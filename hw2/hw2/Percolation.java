@@ -3,6 +3,7 @@ package hw2;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Percolation {
     private boolean[][] grid;
@@ -39,11 +40,10 @@ public class Percolation {
 
     private ArrayList<Integer[]> gerNeighbors(int row, int col) {
         ArrayList<Integer[]> results = new ArrayList<>();
-        for (int i = -1; i < 2; i += 2) {
-            for (int j = -1; j < 2; j += 2) {
-                if (validate(row + i, col + j)) {
-                    results.add(new Integer[]{row + i, col + j});
-                }
+        int[][] neighbors = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
+        for (int[] i : neighbors) {
+            if (validate(row + i[0], col + i[1])) {
+                results.add(new Integer[]{row + i[0], col + i[1]});
             }
         }
         return results;
@@ -90,5 +90,25 @@ public class Percolation {
 
     public boolean percolates() {
         return status.connected(top, bottom);
+    }
+
+    public static void main(String[] args) {
+        PercolationFactory pf = new PercolationFactory();
+        PercolationStats test = new PercolationStats(10, 10000, pf);
+        System.out.println(test.mean());
+        Percolation p = new Percolation(10);
+        p.open(0, 5);
+        p.open(1, 5);
+        p.open(2, 5);
+        p.open(3, 5);
+        p.open(4, 5);
+        p.open(5, 5);
+        p.open(6, 5);
+        p.open(7, 5);
+        p.open(8, 5);
+        p.open(9, 5);
+        System.out.println(p.isOpen(5, 5));
+        System.out.println(p.isFull(5, 5));
+        System.out.println(p.percolates());
     }
 }

@@ -10,6 +10,9 @@ public class PercolationStats {
     private int N;
 
     public PercolationStats(int N, int T, PercolationFactory pf) {
+        if (N <= 0 || T <= 0) {
+            throw new IllegalArgumentException("Wrong input N and T");
+        }
         percolations = new Percolation[T];
         fractions = new int[T];
         this.N = N;
@@ -17,14 +20,12 @@ public class PercolationStats {
             percolations[i] = pf.make(N);
         }
         for (int i = 0; i < T; i++) {
-            int count = 0;
             while (!percolations[i].percolates()) {
                 int row = StdRandom.uniform(N);
                 int col = StdRandom.uniform(N);
                 percolations[i].open(row, col);
-                count++;
             }
-            fractions[i] = count;
+            fractions[i] = percolations[i].numberOfOpenSites();
         }
     }
 

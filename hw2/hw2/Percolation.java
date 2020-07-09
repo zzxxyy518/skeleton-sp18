@@ -24,7 +24,7 @@ public class Percolation {
             }
         }
         statusWithBottom = new WeightedQuickUnionUF(N * N + 2);
-        status = new WeightedQuickUnionUF(N * N +1);
+        status = new WeightedQuickUnionUF(N * N + 1);
         top = 0;
         bottom = N * N + 1;
         size = 0;

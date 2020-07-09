@@ -6,7 +6,7 @@ import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
     private Percolation[] percolations;
-    private int[] fractions;
+    private double[] fractions;
     private int N;
 
     public PercolationStats(int N, int T, PercolationFactory pf) {
@@ -14,7 +14,7 @@ public class PercolationStats {
             throw new IllegalArgumentException("Wrong input N and T");
         }
         percolations = new Percolation[T];
-        fractions = new int[T];
+        fractions = new double[T];
         this.N = N;
         for (int i = 0; i < T; i++) {
             percolations[i] = pf.make(N);
@@ -25,12 +25,12 @@ public class PercolationStats {
                 int col = StdRandom.uniform(N);
                 percolations[i].open(row, col);
             }
-            fractions[i] = percolations[i].numberOfOpenSites();
+            fractions[i] = percolations[i].numberOfOpenSites() * 1.0 / (N * N);
         }
     }
 
     public double mean() {
-        return StdStats.mean(fractions) / (N * N);
+        return StdStats.mean(fractions);
     }
 
     public double stddev() {

@@ -12,6 +12,7 @@ public class Percolation {
     private int N;
     private int top;
     private int bottom;
+    int[][] neighbors = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
 
     public Percolation(int N) {
         if (N <= 0) {
@@ -39,7 +40,7 @@ public class Percolation {
         return !(row >= N || row < 0 || col >= N || col < 0);
     }
 
-    private ArrayList<Integer[]> gerNeighbors(int row, int col) {
+    /*private ArrayList<Integer[]> gerNeighbors(int row, int col) {
         ArrayList<Integer[]> results = new ArrayList<>();
         int[][] neighbors = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
         for (int[] i : neighbors) {
@@ -48,7 +49,7 @@ public class Percolation {
             }
         }
         return results;
-    }
+    }*/
 
     public void open(int row, int col) {
         if (row >= N || row < 0 || col >= N || col < 0) {
@@ -65,10 +66,12 @@ public class Percolation {
         if (row == N - 1) {
             statusWithBottom.union(xyTo1D(row, col), bottom);
         }
-        for (Integer[] neighbor : gerNeighbors(row, col)) {
-            if (isOpen(neighbor[0], neighbor[1])) {
-                status.union(xyTo1D(row, col), xyTo1D(neighbor[0], neighbor[1]));
-                statusWithBottom.union(xyTo1D(row, col), xyTo1D(neighbor[0], neighbor[1]));
+        for (int[] neighbor : neighbors) {
+            if (validate(row + neighbor[0], col + neighbor[1])) {
+                if (isOpen(row + neighbor[0], col + neighbor[1])) {
+                    status.union(xyTo1D(row, col), xyTo1D(row + neighbor[0], col + neighbor[1]));
+                    statusWithBottom.union(xyTo1D(row, col), xyTo1D(row + neighbor[0], col + neighbor[1]));
+                }
             }
         }
     }

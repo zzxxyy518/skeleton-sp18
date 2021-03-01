@@ -3,7 +3,7 @@ package hw4.puzzle;
 
 import edu.princeton.cs.algs4.MinPQ;
 
-public class Solver {
+public final class Solver {
     public static class Node implements Comparable<Node> {
         WorldState item;
         int moves;

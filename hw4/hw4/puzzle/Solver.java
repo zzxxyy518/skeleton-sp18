@@ -4,10 +4,7 @@ package hw4.puzzle;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public final class Solver {
     public static class Node implements Comparable<Node> {
@@ -34,7 +31,7 @@ public final class Solver {
     public MinPQ<Node> fringe;
     public Node destination;
     public Stack<WorldState> result;
-    public Set<Node> used;
+    public Map<WorldState, Node> used;
 
     public Node[] getNeighbors(Iterable<WorldState> neighbors) {
         ArrayList<WorldState> mid = new ArrayList<>();
@@ -53,22 +50,22 @@ public final class Solver {
     public Solver(WorldState initial) {
         fringe = new MinPQ<>();
         result = new Stack<>();
-        used = new HashSet<>();
-        int num = 1;
+        used = new HashMap<>();
         fringe.insert(new Node(initial));
-        used.add(new Node(initial));
+        used.put(initial, new Node(initial));
         while (!fringe.min().getItem().isGoal()) {
             Node temp = fringe.delMin();
             for (WorldState worldState : temp.getItem().neighbors()) {
                 Node mid = new Node(worldState);
-                if (used.contains(mid)) {
-                    continue;
+                if (used.containsKey(mid.getItem())) {
+                    if (used.get(mid.getItem()).compareTo(temp) == 0) {
+                        continue;
+                    }
                 }
                 mid.prev = temp;
                 mid.moves = mid.prev.moves +1;
                 fringe.insert(mid);
-                used.add(mid);
-                num ++;
+                used.put(mid.getItem(), mid);
             }
         }
         destination = fringe.min();
@@ -77,7 +74,6 @@ public final class Solver {
             destination = destination.prev;
         }
         result.push(destination.getItem());
-        System.out.println("number :" + num);
     }
 
     public int moves() {
